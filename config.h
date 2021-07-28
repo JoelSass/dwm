@@ -33,8 +33,9 @@ static const Rule rules[] = {
      *	WM_NAME(STRING) = title
      */
     /* class      instance    title       tags mask     isfloating   monitor */
-    {"Gimp", NULL, NULL, 0, 1, -1},
-    {"Firefox", NULL, NULL, 1 << 8, 0, -1},
+    {"Gimp",      NULL,          NULL,          0,            1,           -1},
+    {"Firefox",   NULL,          NULL,          1 << 8,       0,           -1},
+	{"mpv",       NULL,          NULL,          1,            1,           -1}
 };
 
 /* layout(s) */
@@ -87,12 +88,15 @@ static const char *dmenucmd[] = {
     "dmenu_run", "-m",      dmenumon, "-fn",    dmenufont, "-nb",     col_gray1,
     "-nf",       col_gray3, "-sb",    col_cyan, "-sf",     col_gray4, NULL};
 static const char *termcmd[] = {"st", NULL};
+static const char scratchpadname[] = "scratchpad";
+static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
 
 #include <X11/XF86keysym.h>
 static Key keys[] = {
     /* modifier                     key        function        argument */
     {MODKEY, XK_d, spawn, {.v = dmenucmd}},
     {MODKEY | ShiftMask, XK_Return, spawn, {.v = termcmd}},
+    { MODKEY,                       XK_Return,  togglescratch,  {.v = scratchpadcmd } },
     {MODKEY, XK_b, togglebar, {0}},
     {MODKEY, XK_j, focusstack, {.i = +1}},
     {MODKEY, XK_k, focusstack, {.i = -1}},
@@ -100,7 +104,7 @@ static Key keys[] = {
     {MODKEY | ShiftMask, XK_d, incnmaster, {.i = -1}},
     {MODKEY, XK_h, setmfact, {.f = -0.05}},
     {MODKEY, XK_l, setmfact, {.f = +0.05}},
-    {MODKEY, XK_Return, zoom, {0}},
+    {MODKEY, XK_space, zoom, {0}},
     {MODKEY | Mod1Mask, XK_u, incrgaps, {.i = +1}},
     {MODKEY | Mod1Mask | ShiftMask, XK_u, incrgaps, {.i = -1}},
     {MODKEY | Mod1Mask, XK_i, incrigaps, {.i = +1}},
@@ -124,7 +128,6 @@ static Key keys[] = {
     {MODKEY, XK_s, setlayout, {.v = &layouts[2]}},
     {MODKEY | ShiftMask, XK_s, setlayout, {.v = &layouts[3]}},
     {MODKEY, XK_m, setlayout, {.v = &layouts[11]}},
-    {MODKEY, XK_space, setlayout, {0}},
     {MODKEY | ShiftMask, XK_space, togglefloating, {0}},
     {MODKEY, XK_0, view, {.ui = ~0}},
     {MODKEY | ShiftMask, XK_0, tag, {.ui = ~0}},
